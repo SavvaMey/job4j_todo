@@ -34,7 +34,9 @@ public class HyberStore implements Store, AutoCloseable {
             Transaction transaction = session.beginTransaction();
             session.save(item);
             transaction.commit();
-        }
+        }  catch (Exception e) {
+        LOG.error(e.getMessage());
+    }
         return item;
     }
 
@@ -54,6 +56,8 @@ public class HyberStore implements Store, AutoCloseable {
                 result = false;
             }
             transaction.commit();
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
         }
         return result;
     }
@@ -69,6 +73,8 @@ public class HyberStore implements Store, AutoCloseable {
                 result = true;
             }
             transaction.commit();
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
         }
         return result;
     }
@@ -86,11 +92,13 @@ public class HyberStore implements Store, AutoCloseable {
 
     @Override
     public Item findById(int id) {
-        Item item;
+        Item item = null;
         try (Session session = sf.openSession()) {
             Transaction transaction = session.beginTransaction();
             item = session.get(Item.class, id);
             transaction.commit();
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
         }
         return item;
     }
