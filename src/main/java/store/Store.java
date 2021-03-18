@@ -7,9 +7,7 @@ import java.util.Collection;
 public interface Store {
     Item create(Item element);
 
-    boolean update(int id, Item element);
-
-    boolean delete(int id);
+    void update(int id, Item element);
 
     Collection<Item> findAll();
 

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class HyberStore implements Store, AutoCloseable {
     private static final Logger LOG = LoggerFactory.getLogger(HyberStore.class.getName());
@@ -28,80 +29,50 @@ public class HyberStore implements Store, AutoCloseable {
         return Lazy.INST;
     }
 
+    private <T> T tx(final Function<Session, T> command) {
+        final Session session = sf.openSession();
+        final Transaction tx = session.beginTransaction();
+        try {
+            T rsl = command.apply(session);
+            tx.commit();
+            return rsl;
+        } catch (final Exception e) {
+            LOG.error(e.getMessage(), e);
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
+
     @Override
     public Item create(Item item) {
-        try (Session session = sf.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.save(item);
-            transaction.commit();
-        }  catch (Exception e) {
-        LOG.error(e.getMessage());
-    }
+        this.tx(
+                session -> session.save(item));
         return item;
     }
 
     @Override
-    public boolean update(int id, Item item) {
-        boolean result = true;
-        try (Session session = sf.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            item.setId(id);
-            if (session.get(Item.class, id) != null) {
-                Query query = session.createQuery(
-                        "update model.Item set finished = :finished where id = :id");
-                query.setParameter("finished", true);
-                query.setParameter("id", id);
-                query.executeUpdate();
-            } else {
-                result = false;
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            LOG.error(e.getMessage());
-        }
-        return result;
-    }
-
-    @Override
-    public boolean delete(int id) {
-        boolean result = false;
-        try (Session session = sf.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            Item item = new Item(id);
-            if (session.get(Item.class, id) != null) {
-                session.delete(item);
-                result = true;
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            LOG.error(e.getMessage());
-        }
-        return result;
+    public void update(int id, Item item) {
+        this.tx(session -> session.createQuery(
+                "update model.Item set finished = :finished where id = :id")
+                .setParameter("finished", true)
+                .setParameter("id", id)
+                .executeUpdate()
+        );
     }
 
     @Override
     public List<Item> findAll() {
-        List<Item> result;
-        try (Session session = sf.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            result = session.createQuery("from model.Item").list();
-            transaction.commit();
-        }
-        return result;
+        return this.tx(
+                session -> session.createQuery("from model.Item").list());
     }
 
     @Override
     public Item findById(int id) {
-        Item item = null;
-        try (Session session = sf.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            item = session.get(Item.class, id);
-            transaction.commit();
-        } catch (Exception e) {
-            LOG.error(e.getMessage());
-        }
-        return item;
+        return this.tx(session -> session.get(Item.class, id));
     }
+
 
     @Override
     public void close() throws Exception {
