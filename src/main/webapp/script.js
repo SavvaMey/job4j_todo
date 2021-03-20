@@ -7,10 +7,12 @@ function saveItem() {
             data: {description: $('#newTask').val()},
             dataType: 'json',
         }).done(function (data) {
+            alert(data.userName);
             let addTr = '<tr>'
                 + '<td>' + data.idTask + '</td>'
                 + '<td>' + data.description + '</td>'
-                + '<td>' + data.creatDate + '</td>';
+                + '<td>' + data.creatDate + '</td>'
+                + '<td>' + data.userName + '</td>';
             addTr += '<td>' + '<input type="checkbox" name="done" id="' + data.idTask + '" onchange = "finishTask(this.id)"'
                 + 'value="' + data.idTask + '">' + '</td>' + '</tr>';
             $('#table tr:last').after(addTr);
@@ -33,7 +35,8 @@ function loadAll() {
             addTr += '<tr>'
                 + '<td>' + item.idTask + '</td>'
                 + '<td>' + item.description + '</td>'
-                + '<td>' + item.creatDate + '</td>';
+                + '<td>' + item.creatDate + '</td>'
+                + '<td>' + item.userName + '</td>';
             if (item.finished !== true) {
                 addTr += '<td>' + '<input type="checkbox" name="done" id="' + item.idTask + '" onchange = "finishTask(this.id)"'
                     + 'value="' + item.idTask + '">' + '</td>' + '</tr>';
@@ -65,7 +68,8 @@ function viewTasks() {
                     addTr += '<tr>'
                         + '<td>' + item.idTask + '</td>'
                         + '<td>' + item.description + '</td>'
-                        + '<td>' + item.creatDate + '</td>';
+                        + '<td>' + item.creatDate + '</td>'
+                        + '<td>' + item.userName + '</td>';
                     addTr += '<td>' + '<input type="checkbox" name="done" id="' + item.idTask + '" onchange = "finishTask(this.id)"'
                         + 'value="' + item.idTask + '">' + '</td>' + '</tr>';
                 }

@@ -3,6 +3,7 @@ package servlet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.Item;
+import model.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import store.HyberStore;
@@ -25,7 +26,6 @@ public class IndexServlet extends HttpServlet {
         resp.setContentType("json");
         resp.setCharacterEncoding("UTF-8");
         resp.setHeader("Access-Control-Allow-Origin", "*");
-        String description = req.getParameter("description");
         PrintWriter writer = new PrintWriter(resp.getOutputStream(), true, StandardCharsets.UTF_8);
         JSONArray ar = new JSONArray();
         List<Item> tasks = (List<Item>) HyberStore.instOf().findAll();
@@ -33,8 +33,9 @@ public class IndexServlet extends HttpServlet {
             JSONObject json = new JSONObject();
             json.put("idTask", task.getId());
             json.put("description", task.getDescription());
-            json.put("creatDate", task.getCreated());
+            json.put("creatDate", task.getCreateDate());
             json.put("finished", task.isFinished());
+            json.put("userName", task.getUser().getName());
             ar.put(json);
         }
         writer.println(ar);
@@ -54,14 +55,16 @@ public class IndexServlet extends HttpServlet {
             resp.setCharacterEncoding("UTF-8");
             resp.setHeader("Access-Control-Allow-Origin", "*");
             String description = req.getParameter("description");
-
+            User user = (User) req.getSession().getAttribute("user");
+            System.out.println(user.getName());
             Item item = HyberStore.instOf().create(
-                    new Item(description, false));
+                    new Item(description, false, user));
             PrintWriter writer = new PrintWriter(resp.getOutputStream(), true, StandardCharsets.UTF_8);
             JSONObject json = new JSONObject();
             json.put("idTask", item.getId());
             json.put("description", item.getDescription());
-            json.put("creatDate", item.getCreated());
+            json.put("userName", item.getUser().getName());
+            json.put("creatDate", item.getCreateDate());
             json.put("finished", item.isFinished());
             writer.println(json);
             writer.flush();

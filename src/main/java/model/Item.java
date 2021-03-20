@@ -12,6 +12,9 @@ public class Item {
     private String description;
     private Timestamp createDate;
     private boolean finished;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Item() {
     }
@@ -33,11 +36,12 @@ public class Item {
         this.finished = finished;
     }
 
-    public Item(String description, boolean finished) {
+    public Item(String description, boolean finished, User user) {
         this.description = description;
         long droppedMillis = 1000 * (System.currentTimeMillis() / 1000);
         this.createDate = new Timestamp(droppedMillis);
         this.finished = finished;
+        this.user = user;
     }
 
 
@@ -47,14 +51,6 @@ public class Item {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Timestamp getCreated() {
-        return createDate;
-    }
-
-    public void setCreated(Timestamp created) {
-        this.createDate = created;
     }
 
     public int getId() {
@@ -74,6 +70,21 @@ public class Item {
         this.finished = finished;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
+    }
+
+    public Timestamp getCreateDate() {
+        return createDate;
+    }
 
     @Override
     public String toString() {
@@ -82,6 +93,7 @@ public class Item {
                 + ", description='" + description + '\''
                 + ", createDate=" + createDate
                 + ", finished=" + finished
+                + ", user=" + user
                 + '}';
     }
 }
