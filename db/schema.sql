@@ -14,3 +14,8 @@ CREATE TABLE IF NOT EXISTS item(
     finished boolean NOT NULL DEFAULT false
 );
 
+CREATE TABLE IF NOT EXISTS categories(
+    id serial primary key,
+    name text NOT NULL
+);
+

@@ -53,13 +53,17 @@
                     </div>
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="text" class="form-control" id="password" name="password">
+                        <input type="password" class="form-control" id="password" name="password">
                     </div>
-                    <button type="submit" class="btn btn-primary" onclick="return validate()">Sign in</button>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" onclick="return validate()">Sign in</button>
+                    </div>
                 </form>
-                <form action="<%=request.getContextPath()%>/reg" method="get">
-                    <button type="submit" class="btn btn-primary">Sign up</button>
-                </form>
+                <div class="form-group">
+                    <form action="<%=request.getContextPath()%>/reg" method="get">
+                        <button type="submit" class="btn btn-primary">Sign up</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

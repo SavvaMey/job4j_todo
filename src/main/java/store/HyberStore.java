@@ -1,5 +1,6 @@
 package store;
 
+import model.Category;
 import model.Item;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -65,13 +66,33 @@ public class HyberStore implements Store, AutoCloseable {
     @Override
     public List<Item> findAll() {
         return this.tx(
-                session -> session.createQuery("from model.Item").list());
+                session -> session.createQuery(
+                        "select distinct i from Item i join fetch i.categories order by i.id",
+                        Item.class)
+                        .list());
+//                        session.createQuery("from model.Item").list());
     }
 
     @Override
     public Item findById(int id) {
         return this.tx(session -> session.get(Item.class, id));
     }
+
+    @Override
+    public List<Category> findAllCategory() {
+        return this.tx(
+                session -> session.createQuery("from model.Category").list());
+    }
+
+    @Override
+    public Category findByIdCategory(int id) {
+        return this.tx(session -> session.get(Category.class, id));
+    }
+
+//    @Override
+//    public Category findByIdCategory(int id) {
+//        return this.tx(session -> session.get(Category.class, id));
+//    }
 
 
     @Override

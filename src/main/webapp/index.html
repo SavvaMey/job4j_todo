@@ -24,19 +24,25 @@
 <body>
 
 <div class="container-fluid">
-    <h1>TODO list</h1>
-<!--    <li class="nav-item">-->
-<!--        <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp"> ${user.name}"/> | Выйти</a>-->
-<!--    </li>-->
+    <h2>TODO list</h2>
+    <div id="currentUser"></div>
     <form>
-        <div class="form-group">
-            <label for="newTask">Create new Task</label>
-            <input type="text" class="form-control" id="newTask"  placeholder="Enter description">
-            <button type="button" class="btn btn-primary" onclick="saveItem()">Submit</button>
-        </div>
-        <div class="form-group">
-            <label for="allCheckedTask">Show all tasks</label>
-            <input type="checkbox" id="allCheckedTask" name ="allCheckedTask" checked onclick="viewTasks()"/>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="newTask">Create new Task</label>
+                <input type="text" class="form-control" id="newTask"  placeholder="Enter description">
+            </div>
+                <div class="form-group">
+                    <label for="categories">Categories</label>
+                    <span id="categories"></span>
+                </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="saveItem()">Submit</button>
+            </div>
+            <div class="form-group">
+                <label for="allCheckedTask">Show all tasks</label>
+                <input type="checkbox" id="allCheckedTask" name ="allCheckedTask" checked onclick="viewTasks()"/>
+            </div>
         </div>
     </form>
 </div>
@@ -49,6 +55,7 @@
             <th>Description</th>
             <th>Created</th>
             <th>User</th>
+            <th>Categories</th>
             <th>Finished</th>
         </tr>
         </thead>

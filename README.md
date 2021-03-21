@@ -11,10 +11,10 @@ jQuery, Ajax, JSON, Apache Tomcat, bootstrap
 
 **Demonstration of the application:**
 
-![alt text](images/4.PNG)
-
-![alt text](images/3.PNG)
+![alt text](images/1.PNG)
 
 ![alt text](images/2.PNG)
 
-![alt text](images/1.PNG)
+![alt text](images/3.PNG)
+
+![alt text](images/4.PNG)
