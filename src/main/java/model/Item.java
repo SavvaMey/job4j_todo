@@ -3,6 +3,7 @@ package model;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -11,11 +12,17 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String description;
-    private Timestamp createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+
     private boolean finished;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
+
     private User user;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Category> categories = new ArrayList<>();
@@ -43,7 +50,7 @@ public class Item {
     public Item(String description, boolean finished, User user) {
         this.description = description;
         long droppedMillis = 1000 * (System.currentTimeMillis() / 1000);
-        this.createDate = new Timestamp(droppedMillis);
+        this.createDate = new Date(droppedMillis);
         this.finished = finished;
         this.user = user;
     }
@@ -98,7 +105,7 @@ public class Item {
         this.createDate = createDate;
     }
 
-    public Timestamp getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
